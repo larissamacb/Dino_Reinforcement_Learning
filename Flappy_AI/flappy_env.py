@@ -15,7 +15,6 @@ class FlappyEnv(gym.Env):
         # Ações: 0 = Nada, 1 = Pular
         self.action_space = spaces.Discrete(2)
 
-        # Observação Normalizada
         self.observation_space = spaces.Box(low=-1, high=1, shape=(4,), dtype=np.float32)
 
     def _get_obs(self):
@@ -52,19 +51,17 @@ class FlappyEnv(gym.Env):
         terminated = self.game.game_over
         
         if self.render_mode == "human":
-            self._render_frame() # Chama nossa renderização customizada
+            self._render_frame() 
 
         return obs, reward, terminated, False, self._get_info()
 
     def _render_frame(self):
-        # Desenha o jogo normal primeiro
         self.game.render()
         
-        # --- AQUI COMEÇA A VISUALIZAÇÃO DA IA ---
-        screen = self.game.screen # Pega a tela do jogo
+        screen = self.game.screen 
         if screen is None: return
 
-        # 1. Achar o alvo (o próximo cano)
+        # Achar o alvo (o próximo cano)
         target_pipe = None
         for pipe in self.game.pipes:
             if pipe['top'].right > self.game.bird_rect.left:
@@ -78,14 +75,14 @@ class FlappyEnv(gym.Env):
             
             bird_center = self.game.bird_rect.center
 
-            # 🔴 LINHA VERMELHA: O "Olhar" da IA
+            # Linha vermelha
             # Conecta o pássaro ao objetivo. Representa Distância X e Distância Y.
             pygame.draw.line(screen, (255, 0, 0), bird_center, (pipe_center_x, gap_center_y), 3)
             
             # Desenha uma bolinha no alvo para ficar claro
             pygame.draw.circle(screen, (255, 0, 0), (int(pipe_center_x), int(gap_center_y)), 5)
 
-            # 🔵 LINHA AZUL: A Velocidade Vertical
+            # Linha azul
             # Se aponta pra baixo, o pássaro cai. Pra cima, ele sobe.
             # Multiplicamos por 10 para a linha ficar visível
             vel_vector_end = (bird_center[0], bird_center[1] + (self.game.bird_vel * 10))

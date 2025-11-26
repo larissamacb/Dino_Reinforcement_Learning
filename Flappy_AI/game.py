@@ -2,7 +2,6 @@ import pygame
 import random
 import os
 
-# Configurações
 SCREEN_WIDTH = 288
 SCREEN_HEIGHT = 512
 PIPE_GAP = 100
@@ -16,7 +15,6 @@ class FlappyGame:
         self.screen = None
         self.clock = pygame.time.Clock()
         
-        # Carrega Assets
         self.bg_img = pygame.image.load(os.path.join("assets", "sprites", "background-day.png"))
         self.base_img = pygame.image.load(os.path.join("assets", "sprites", "base.png"))
         self.bird_imgs = [
