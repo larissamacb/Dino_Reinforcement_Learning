@@ -24,7 +24,6 @@ class DinoEnv(gym.Env):
         # 3 Ações: 0=Correr, 1=Pular, 2=Agachar
         self.action_space = spaces.Discrete(3)
 
-        # Observação FÍSICA:
         # [Y do Dino, Tempo p/ Impacto, Altura Obst, Tipo Obst]
         self.observation_space = spaces.Box(low=0, high=1, shape=(4,), dtype=numpy.float32)
         
@@ -45,7 +44,6 @@ class DinoEnv(gym.Env):
 
         target = min(valid_obstacles, key=lambda o: o.rect.x)
         
-        # --- A MÁGICA: TEMPO ATÉ O IMPACTO ---
         dist_pixels = target.rect.x - player_x
         if dist_pixels < 0: dist_pixels = 0
         
@@ -140,14 +138,13 @@ class DinoEnv(gym.Env):
         self.cloud.draw(self.screen)
         for obs in self.obstacles: obs.draw(self.screen)
         
-        # --- DEBUG VISUAL ---
         player_x = self.player.dino_rect.x + self.player.dino_rect.width
         player_y = self.player.dino_rect.y
         
         valid_obstacles = [o for o in self.obstacles if o.rect.x + o.rect.width > player_x]
         if valid_obstacles:
             target = min(valid_obstacles, key=lambda o: o.rect.x)
-            # Linha Vermelha (A "Visão" da IA)
+            # Linha Vermelha
             pygame.draw.line(self.screen, (255, 0, 0), (player_x, player_y), (target.rect.x, target.rect.y), 2)
             
             # Escreve a ação
@@ -162,7 +159,7 @@ class DinoEnv(gym.Env):
         
         pygame.display.update()
         pygame.event.pump()
-        self.clock.tick(30) # Trava em 30 FPS para você ver
+        self.clock.tick(30) 
 
     def close(self):
         if self.screen:

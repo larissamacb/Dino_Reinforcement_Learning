@@ -1,25 +1,13 @@
-# !/usr/bin/python
-# -*- coding: utf-8 -*-
 import datetime
 import os
 import random
 import threading
 
 import pygame
-pygame.init() # <-- ADICIONE ESTA LINHA DE VOLTA AQUI
-
-# pygame.init()
-
-# Global Constants
+pygame.init() 
 
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
-# SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-# pygame.display.set_caption("Chrome Dino Runner")
-
-# Ico = pygame.image.load("assets/DinoWallpaper.png")
-# pygame.display.set_icon(Ico)
 
 RUNNING = [
     pygame.image.load(os.path.join("assets/Dino", "DinoRun1.png")),
@@ -136,8 +124,6 @@ class Cloud:
 
     def update(self, game_speed):
         self.x -= game_speed
-    # if self.rect.x < -self.rect.width:   <-- COMENTE/DELETE
-    #     obstacles.pop()                 <-- COMENTE/DELETE
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.x, self.y))
@@ -152,8 +138,6 @@ class Obstacle:
 
     def update(self, game_speed):
         self.rect.x -= game_speed
-        # if self.rect.x < -self.rect.width:
-        #    obstacles.pop()
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.rect)
@@ -190,14 +174,12 @@ class Bird(Obstacle):
 
 
 def main():
-    # ADICIONE ESTAS LINHAS AQUI
     pygame.init()
-    global SCREEN # <-- ADICIONE ESTA LINHA
+    global SCREEN 
     SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Chrome Dino Runner")
     Ico = pygame.image.load("assets/DinoWallpaper.png")
     pygame.display.set_icon(Ico)
-    # FIM DO BLOCO
 
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles
     run = True
@@ -311,10 +293,8 @@ def main():
 
 
 def menu(death_count):
-    # ADICIONE ESTAS LINHAS AQUI
     pygame.init()
     SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    # FIM DO BLOCO
     global points
     global FONT_COLOR
     run = True

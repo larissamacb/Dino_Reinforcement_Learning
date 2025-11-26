@@ -1,5 +1,5 @@
 import gymnasium as gym
-from stable_baselines3 import PPO # <-- Mudou para PPO
+from stable_baselines3 import PPO 
 
 from dino_env import DinoEnv 
 
@@ -7,8 +7,7 @@ MODEL_PATH = "dino_dqn_final.zip"
 
 env = DinoEnv(render_mode="human")
 
-# Carrega PPO
-model = PPO.load(MODEL_PATH, env=env) # <-- Mudou para PPO
+model = PPO.load(MODEL_PATH, env=env)
 
 print("--- Iniciando a Demonstração PPO ---")
 
@@ -17,8 +16,6 @@ score_total = 0
 num_partidas = 0
 
 while num_partidas < 10:
-    # PPO não precisa de 'deterministic=False' tanto quanto DQN,
-    # mas True é o padrão para testes.
     action, _states = model.predict(obs, deterministic=True)
     
     obs, reward, terminated, truncated, info = env.step(action)
