@@ -88,7 +88,6 @@ class FlappyEnv(gym.Env):
             vel_vector_end = (bird_center[0], bird_center[1] + (self.game.bird_vel * 10))
             pygame.draw.line(screen, (0, 0, 255), bird_center, vel_vector_end, 4)
 
-        # Atualiza a tela com os desenhos novos
         pygame.display.update()
 
     def close(self):
