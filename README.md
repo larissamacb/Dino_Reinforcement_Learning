@@ -1,8 +1,8 @@
 # 🎮 Reinforcement Learning Arcade Agents
 
-Este repositório contém implementações de agentes de **Inteligência Artificial** treinados para jogar clássicos do arcade utilizando **Aprendizado por Reforço (Reinforcement Learning)**.
+Este repositório contém implementações de agentes de Inteligência Artificial treinados para jogar clássicos do arcade utilizando **Aprendizado por Reforço (Reinforcement Learning)**.
 
-O foco do projeto é a aplicação prática do algoritmo **PPO (Proximal Policy Optimization)** em ambientes customizados criados com a API **Gymnasium**, demonstrando como "sensores matemáticos" podem ser mais eficientes que o processamento de imagens para treinar IAs em jogos de física.
+O foco do projeto é a aplicação prática do algoritmo **PPO (Proximal Policy Optimization)** em ambientes customizados criados com a API Gymnasium, demonstrando como "sensores matemáticos" podem ser mais eficientes que o processamento de imagens para treinar IAs em jogos de física.
 
 ## 🧠 Sobre a Abordagem
 
