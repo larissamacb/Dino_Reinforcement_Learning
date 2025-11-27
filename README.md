@@ -100,8 +100,8 @@ flappy_models
 
 Abaixo estão vídeos resumidos (de aproximadamente 1 minuto cada) do progresso da IA para os dois jogos:
 
-https://github.com/user-attachments/assets/7cf8f76b-884e-4c15-9d41-1f38fe542e50
-https://github.com/user-attachments/assets/747be8d1-15d3-4246-b478-58fa02995f5b
+[🦖 IA aprendendo a jogar Dino Run](https://github.com/user-attachments/assets/7cf8f76b-884e-4c15-9d41-1f38fe542e50) | 
+[🐤 IA aprendendo a jogar Flappy Bird](https://github.com/user-attachments/assets/747be8d1-15d3-4246-b478-58fa02995f5b)
 
 ---
 
