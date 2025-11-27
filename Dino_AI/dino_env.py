@@ -21,16 +21,14 @@ class DinoEnv(gym.Env):
         self.clock = None
         self.font = None
         
-        # 3 Ações: 0=Correr, 1=Pular, 2=Agachar
+        # 3 Ações
         self.action_space = spaces.Discrete(3)
 
-        # [Y do Dino, Tempo p/ Impacto, Altura Obst, Tipo Obst]
+        # Observação FÍSICA
         self.observation_space = spaces.Box(low=0, high=1, shape=(4,), dtype=numpy.float32)
-        
         self.last_action = 0
 
     def _get_obs(self):
-        # 1. Onde estou?
         dino_y = self.player.dino_rect.y / SCREEN_HEIGHT
 
         if not self.obstacles:
@@ -47,16 +45,11 @@ class DinoEnv(gym.Env):
         dist_pixels = target.rect.x - player_x
         if dist_pixels < 0: dist_pixels = 0
         
-        # "Tempo = Distância / Velocidade"
-        # Normalizamos isso para um valor entre 0 e 1 (onde 1.0 é "muito tempo" e 0.0 é "bateu")
-        # Assumimos que 1000 pixels/frame é seguro o suficiente
-        time_to_impact = (dist_pixels / self.game_speed) / 100.0
+        # Normaliza o tempo (dividindo por 50.0 para sensibilidade)
+        time_to_impact = (dist_pixels / self.game_speed) / 50.0 
         time_to_impact = max(0.0, min(1.0, time_to_impact))
 
-        # Altura do Obstáculo
         obstacle_height = target.rect.y / SCREEN_HEIGHT
-        
-        # Tipo (0.0 = Cacto, 1.0 = Pássaro)
         obstacle_type = 1.0 if isinstance(target, Bird) else 0.0
 
         return numpy.array([dino_y, time_to_impact, obstacle_height, obstacle_type], dtype=numpy.float32)
@@ -67,7 +60,7 @@ class DinoEnv(gym.Env):
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
         if self.render_mode == "human" and self.screen is None:
-            pygame.display.set_caption("Dino IA - Visão de Física")
+            pygame.display.set_caption("Dino IA - Modo Infinito")
             self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
             self.clock = pygame.time.Clock()
             self.font = pygame.font.Font("freesansbold.ttf", 20)
@@ -80,6 +73,7 @@ class DinoEnv(gym.Env):
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.game_over = False
+        self.passed_obstacles = set()
         return self._get_obs(), self._get_info()
 
     def step(self, action):
@@ -115,17 +109,43 @@ class DinoEnv(gym.Env):
                 terminated = True
                 break
 
-        # Recompensa Simples (Padrão PPO)
-        reward = 1.0
+        # --- 🚀 META DE 5000 PONTOS ---
+        truncated = False
+        # Só encerra o jogo se bater a meta E NÃO ESTIVERMOS ASSISTINDO
+        if self.points >= 5000 and self.render_mode != "human":
+            self.game_over = True
+            terminated = True
+            # Bônus GIGANTE por "zerar" o treino
+            return self._get_obs(), 200.0, terminated, truncated, self._get_info()
+
+        # --- SISTEMA DE RECOMPENSA ---
+        reward = 0.1 
+        obs = self._get_obs()
+        time_to_impact = obs[1]
+
+        # PUNIÇÃO POR PULAR CEDO (Anti-Ansiedade)
+        if action == 1 and time_to_impact > 0.4:
+            reward -= 0.5
+
+        # INCENTIVO DE PRECISÃO
+        if action == 1 and time_to_impact <= 0.4:
+            reward += 0.1
+
         if self.game_over: reward = -10.0
 
+        # Bônus por passar obstáculo
+        player_x = self.player.dino_rect.x
+        for obs_obj in self.obstacles:
+            if obs_obj not in self.passed_obstacles and obs_obj.rect.x < player_x:
+                self.passed_obstacles.add(obs_obj)
+                reward += 5.0
+
         if self.render_mode == "human": self._render_frame()
-        return self._get_obs(), reward, terminated, False, self._get_info()
+        
+        return obs, reward, terminated, truncated, self._get_info()
 
     def _render_frame(self):
         if self.screen is None: return
-        
-        # Fundo
         self.screen.fill((255, 255, 255))
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
@@ -133,24 +153,23 @@ class DinoEnv(gym.Env):
         if self.x_pos_bg <= -image_width: self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
         
-        # Sprites
         self.player.draw(self.screen)
         self.cloud.draw(self.screen)
         for obs in self.obstacles: obs.draw(self.screen)
         
+        # Debug
         player_x = self.player.dino_rect.x + self.player.dino_rect.width
         player_y = self.player.dino_rect.y
-        
         valid_obstacles = [o for o in self.obstacles if o.rect.x + o.rect.width > player_x]
         if valid_obstacles:
             target = min(valid_obstacles, key=lambda o: o.rect.x)
-            # Linha Vermelha
             pygame.draw.line(self.screen, (255, 0, 0), (player_x, player_y), (target.rect.x, target.rect.y), 2)
             
-            # Escreve a ação
             if self.font:
                 acao = ["CORRER", "PULAR", "AGACHAR"][self.last_action]
-                txt = self.font.render(f"IA: {acao}", True, (255,0,0))
+                obs = self._get_obs()
+                tempo = obs[1]
+                txt = self.font.render(f"IA: {acao} | Tempo: {tempo:.2f}", True, (255,0,0))
                 self.screen.blit(txt, (50, 50))
 
         if self.font:
