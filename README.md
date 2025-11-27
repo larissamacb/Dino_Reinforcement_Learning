@@ -44,13 +44,13 @@ A IA aprende a controlar o pássaro para passar pelos canos, lidando com gravida
 
 ---
 
-## 🚀 Como Rodar
+## 🌀 Como Rodar
 
 ### Pré-requisitos
 Certifique-se de ter o Python instalado e as dependências do projeto:
 
 ```bash
-pip install gymnasium stable-baselines3 pygame shimmy tensorboard
+pip install gymnasium stable-baselines3 pygame shimmy tensorboard tqdm rich
 ```
 
 ### Executando o Dino AI e o Flappy AI
@@ -93,3 +93,16 @@ dino_dqn_final.zip
 flappy_logs
 flappy_models
 ```
+
+---
+
+## 🌀 Demonstração
+
+Abaixo estão vídeos resumidos (de aproximadamente 1 minuto cada) do progresso da IA para os dois jogos:
+
+https://github.com/user-attachments/assets/7cf8f76b-884e-4c15-9d41-1f38fe542e50
+https://github.com/user-attachments/assets/747be8d1-15d3-4246-b478-58fa02995f5b
+
+---
+
+✏️ Projeto desenvolvido por [Larissa](https://github.com/larissamacb) e [Samuel](https://github.com/SamuelGdA)
