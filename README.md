@@ -76,7 +76,7 @@ O terminal vai avisar quando o treinamento tiver acabado.
 
 **Para Assistir (A IA jogando):**
 ```bash
-python train.py
+python play.py
 ```
 
 Se quiser usar os exemplos já treinados para ver a IA jogando perfeitamente sem precisar treinar no seu computador, arraste **todos** os arquivos da pasta `EXEMPLO DE TREINAMENTO` respectiva ao jogo que você deseja para a raiz **da pasta desse jogo**. Antes, certifique-se de apagar (ou deixar dentro de uma pasta temporária que você pode criar), para cada jogo, as seguintes pastas:
